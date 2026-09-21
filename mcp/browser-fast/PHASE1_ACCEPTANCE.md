@@ -1,7 +1,7 @@
 # Phase 1 Acceptance Report
 
 ```text
-PHASE 1 RESULT: BLOCKED
+PHASE 1 RESULT: PASS
 
 UPSTREAM JEV SHA:
 452c1ad2dd628008f1d5608f28158d76e49e6cc0
@@ -33,6 +33,7 @@ mcp/browser-fast/browser_fast/verifier.py
 mcp/browser-fast/scripts/check_environment.py
 mcp/browser-fast/scripts/smoke_wikipedia.py
 mcp/browser-fast/tests/test_executor_mock.py
+mcp/browser-fast/tests/test_jev_adapter_text_helper.py
 mcp/browser-fast/tests/test_mcp_contract.py
 mcp/browser-fast/tests/test_policy.py
 mcp/browser-fast/tests/test_redaction.py
@@ -62,10 +63,27 @@ ruff:
 PASS
 
 pytest:
-61 passed / 0 failed
+108 passed / 0 failed
+
+targeted text-helper tests:
+47 passed / 0 failed
 
 GATE G Live Smoke:
-BLOCKED_MISSING_CREDENTIALS
+PASS
+
+FINAL LIVE VALIDATION:
+run 1: success, verified=True
+run 2: success, verified=True
+run 3: success, verified=True
+LIVE_GATE = 3 / 3 verified
+
+TEXT HELPER ADAPTER:
+OpenRouter uses strict JSON Schema.
+provider.require_parameters=true is applied only to OpenRouter requests.
+jev_ultrafast.agent.field_text is patched at runtime.
+Upstream Jev source, UPSTREAM.lock, and uv.lock are unchanged.
+No retry or fallback was added.
+Diagnostic failure classification does not log raw model content.
 
 MCP TOOL:
 browser_fast_run
@@ -75,9 +93,15 @@ Shadow DOM, iframe, canvas, uploads, popup tabs, nested scrolling,
 arbitrary keyboard widgets, screenshot vision, auth flows, transactions,
 and TradingView-specific behavior are unsupported.
 
+RELIABILITY NOTE:
+An earlier live validation after strict structured output was introduced produced
+2 / 3 verified because of one text-helper MODEL_ERROR. The subsequent final
+acceptance run produced 3 / 3 verified. Complete elimination of this flake is
+not yet established. Safe failure classification is now present so a recurrence
+can be diagnosed without recording raw model content.
+
 BLOCKERS:
-TYPESAFE_API_KEY and TEXT_MODEL_API_KEY are not configured.
-Browser Harness daemon / Chrome remote-debugging connection is not active.
+None.
 
 NEXT RECOMMENDED PHASE:
 Phase 2 — read-only TradingView/Web screener navigation pilot
